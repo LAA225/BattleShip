@@ -19,6 +19,8 @@ BattleShip::BattleShip()
 {
     firstscreen();
     rules();
+
+    // setup all player boards
     system("CLS");
     cout << "Let the war begin!" << endl
          << endl;
@@ -45,6 +47,7 @@ BattleShip::BattleShip()
     Sleep(4000);
     system("CLS");
 
+    // begin game
     shoot_p1(setBoard1, setBoard2, player1Board, player2Board);
 }
 
