@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <iostream>
 #include "board.h"
+#include "coordinate.h"
 
 using namespace std;
 
@@ -82,8 +83,32 @@ protected:
         }
         return true;
     }
-    int checkValidity(Board board, coordinate startPoint); // does it cross other ships
-    void draw(Board board, coordinate startPoint, int validPlace);
+    int checkValidity(Board board, coordinate startPoint) // does it cross other ships
+    {
+        for (int i = 0; i < length; i++)
+        {
+            coordinate temp = startPoint + shape[i];
+            if (board.checkEmptySpace(temp) == false)
+            {
+                return NOTVALID;
+            }
+        }
+
+        return VALID;
+    }
+    void draw(Board board, coordinate startPoint, int validPlace)
+    {
+        int color = 0;
+        if (validPlace == VALID)
+        {
+            color = 1;
+        }
+        for (int i = 0; i < length; i++)
+        {
+            coordinate temp = startPoint + shape[i];
+            board.draw(temp, symbol, 0);
+        }
+    }
     void erase(Board board, coordinate startPoint);
 
 public:
@@ -129,14 +154,15 @@ public:
         bool Chosen = false;
         int validPlace = 0;
         coordinate startPoint(board.lowerLimit, board.lowerLimit);
-        while (!Chosen && !validPlace)
+        while (!Chosen || !validPlace)
         {
+            validPlace = checkValidity(board, startPoint); // does it intersect or not
+            draw(board, startPoint, validPlace);
             board.display();
             Chosen = navigate(board, startPoint);
             cout << Chosen << endl;
-            cout << startPoint.x << " " << startPoint.y << endl;
-            // validPlace = checkValidity(board, startPoint); // does it intersect or not
-            //  draw(board, startPoint, validPlace);
+            cout << startPoint << endl;
+            cout << validPlace << endl;
             //  erase(board, startPoint);
         }
 

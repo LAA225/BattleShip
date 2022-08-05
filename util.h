@@ -1,4 +1,6 @@
 #include <iostream>
+#include <windows.h>
+#include <conio.h>
 
 #ifndef UTIL_H
 #define UTIL_H
@@ -16,37 +18,31 @@
 #define VALID 1
 #define NOTVALID 0
 
-class coordinate
+// Colors for ships during ship placement
+// COLORS LIST
+// 1: Blue
+// 2: Green
+// 3: Cyan
+// 4: Red
+// 5: Purple
+// 6: Yellow (Dark)
+// 7: Default white
+// 8: Gray/Grey
+// 9: Bright blue
+// 10: Brigth green
+// 11: Bright cyan
+// 12: Bright red
+// 13: Pink/Magenta
+// 14: Yellow
+// 15: Bright white
+#define VALID_PLACE 2
+#define FIXED_PLACE 1
+#define INVALID_PLACE 4
+#define EMPTY 7
+
+void Color(int color)
 {
-public:
-    int x;
-    int y;
-
-    coordinate()
-    {
-        x = 0;
-        y = 0;
-    }
-    coordinate(int a, int b)
-    {
-        x = a;
-        y = b;
-    }
-
-    friend std::ostream &operator<<(std::ostream &, const coordinate &);
-    coordinate operator+(const coordinate &a)
-    {
-        coordinate ans;
-        ans.x = x + a.x;
-        ans.y = y + a.y;
-        return ans;
-    }
-};
-
-std::ostream &operator<<(std::ostream &os, const coordinate &a)
-{
-    os << "x: " << a.x << " y: " << a.y;
-    return os;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
 #endif
