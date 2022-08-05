@@ -7,15 +7,15 @@ using namespace std;
 #ifndef BOARD_H
 #define BOARD_H
 
-struct Board
+class Board
 {
     char **board;
     int sizeOfBoard;
-    int lowerLimit;
-    int upperLimit;
     int **color;
 
 public:
+    int lowerLimit;
+    int upperLimit;
     Board()
     {
         sizeOfBoard = 12;

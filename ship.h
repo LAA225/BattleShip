@@ -30,7 +30,7 @@ protected:
             case KEY_UP:
                 temp.x = startPoint.x - 1;
                 temp.y = startPoint.y;
-                if (shipFit(board, temp))
+                if (board.checkBoardBoundary(temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -39,7 +39,7 @@ protected:
             case KEY_DOWN:
                 temp.x = startPoint.x + 1;
                 temp.y = startPoint.y;
-                if (shipFit(board, temp))
+                if (board.checkBoardBoundary(temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -48,7 +48,7 @@ protected:
             case KEY_RIGHT:
                 temp.x = startPoint.x;
                 temp.y = startPoint.y + 1;
-                if (shipFit(board, temp))
+                if (board.checkBoardBoundary(temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -57,7 +57,7 @@ protected:
             case KEY_LEFT:
                 temp.x = startPoint.x;
                 temp.y = startPoint.y - 1;
-                if (shipFit(board, temp))
+                if (board.checkBoardBoundary(temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -154,12 +154,23 @@ public:
         bool Chosen = false;
         int validPlace = 0;
         coordinate startPoint(board.lowerLimit, board.lowerLimit);
+        coordinate prev(board.lowerLimit, board.upperLimit);
         while (!Chosen || !validPlace)
         {
             validPlace = checkValidity(board, startPoint); // does it intersect or not
             draw(board, startPoint, validPlace);
             board.display();
             Chosen = navigate(board, startPoint);
+            if (shipFit(board, startPoint))
+            {
+                prev.x = startPoint.x;
+                prev.y = startPoint.y;
+            }
+            else
+            {
+                startPoint.x = prev.x;
+                startPoint.y = prev.y;
+            }
             cout << Chosen << endl;
             cout << startPoint << endl;
             cout << validPlace << endl;
