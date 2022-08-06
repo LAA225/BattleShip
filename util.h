@@ -4,13 +4,17 @@
 
 #ifndef UTIL_H
 #define UTIL_H
-// Pressing these keys makes the position on the board move
+
+// Buttons/keys to change position on the board
 #define KEY_UP 72    // arrow up key
 #define KEY_DOWN 80  // arrow down key
 #define KEY_LEFT 75  // arrow left key
 #define KEY_RIGHT 77 // arrow right key
 
-// Pressing this button means the player has decided where to set or shoot
+// Button/Key to change orientation of ship
+#define ORIENTATION 32 // space bar
+
+// Button/key to select a spot
 #define FINISHED 13 // enter button.
 
 // Ship placement descriptions

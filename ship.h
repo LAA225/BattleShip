@@ -30,7 +30,7 @@ protected:
             case KEY_UP:
                 temp.x = startPoint.x - 1;
                 temp.y = startPoint.y;
-                if (board.checkBoardBoundary(temp))
+                if (shipFit(board, temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -39,7 +39,7 @@ protected:
             case KEY_DOWN:
                 temp.x = startPoint.x + 1;
                 temp.y = startPoint.y;
-                if (board.checkBoardBoundary(temp))
+                if (shipFit(board, temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -48,7 +48,7 @@ protected:
             case KEY_RIGHT:
                 temp.x = startPoint.x;
                 temp.y = startPoint.y + 1;
-                if (board.checkBoardBoundary(temp))
+                if (shipFit(board, temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -57,7 +57,7 @@ protected:
             case KEY_LEFT:
                 temp.x = startPoint.x;
                 temp.y = startPoint.y - 1;
-                if (board.checkBoardBoundary(temp))
+                if (shipFit(board, temp))
                 {
                     startPoint.x = temp.x;
                     startPoint.y = temp.y;
@@ -65,11 +65,29 @@ protected:
                 return false;
             case FINISHED:
                 return true;
+            case ORIENTATION:
+                changeOrientation();
+                if (shipFit(board, startPoint) == false)
+                {
+                    changeOrientation();
+                }
+                return false;
             default:
                 break;
             }
         }
     }
+    // change shape from horizontial to vertical or vice versa
+    void changeOrientation()
+    {
+        for (int i = 0; i < length; i++)
+        {
+            int temp = shape[i].x;
+            shape[i].x = shape[i].y;
+            shape[i].y = temp;
+        }
+    }
+
     bool shipFit(Board board, coordinate start)
     {
         coordinate temp;
@@ -138,43 +156,24 @@ public:
         return length;
     }
 
-    // change shape from horizontial to vertical or vice versa
-    void changeOrientation()
-    {
-        for (int i = 0; i < length; i++)
-        {
-            int temp = shape[i].x;
-            shape[i].x = shape[i].y;
-            shape[i].y = temp;
-        }
-    }
-
     void placeShip(Board board)
     {
         bool Chosen = false;
         int validPlace = 0;
         coordinate startPoint(board.lowerLimit, board.lowerLimit);
         coordinate prev(board.lowerLimit, board.upperLimit);
+        vector<coordinate> prevShape = shape;
         while (!Chosen || !validPlace)
         {
             validPlace = checkValidity(board, startPoint); // does it intersect or not
             draw(board, startPoint, validPlace);
             board.display();
             Chosen = navigate(board, startPoint);
-            if (shipFit(board, startPoint))
-            {
-                prev.x = startPoint.x;
-                prev.y = startPoint.y;
-            }
-            else
-            {
-                startPoint.x = prev.x;
-                startPoint.y = prev.y;
-            }
             cout << Chosen << endl;
             cout << startPoint << endl;
             cout << validPlace << endl;
             //  erase(board, startPoint);
+            prevShape = shape;
         }
 
         // draw(board, startPoint, );
