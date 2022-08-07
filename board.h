@@ -21,6 +21,7 @@ public:
         sizeOfBoard = 12;
         lowerLimit = 1;
         upperLimit = 10;
+        initializeBoard();
     }
     Board(int s)
     {
@@ -33,6 +34,22 @@ public:
         sizeOfBoard = s;
         lowerLimit = 1;
         upperLimit = s - 2;
+        initializeBoard();
+    }
+    Board(const Board &b)
+    {
+        sizeOfBoard = b.sizeOfBoard;
+        lowerLimit = b.lowerLimit;
+        upperLimit = b.upperLimit;
+        initializeBoard();
+        for (int i = 0; i < sizeOfBoard; i++)
+        {
+            for (int j = 0; j < sizeOfBoard; j++)
+            {
+                board[i][j] = b.board[i][j];
+                color[i][j] = b.color[i][j];
+            }
+        }
     }
 
     void display()
@@ -41,6 +58,7 @@ public:
         {
             for (int j = 0; j < sizeOfBoard; j++)
             {
+                Color(color[i][j]);
                 cout << board[i][j] << " ";
             }
             cout << endl;
@@ -121,6 +139,22 @@ public:
         board[point.x][point.y] = symbol;
         color[point.x][point.y] = colorOfSymbol;
         return;
+    }
+    char get(coordinate point)
+    {
+        if (point.x < sizeOfBoard && point.x > -1 && point.y < sizeOfBoard && point.y > -1)
+        {
+            return board[point.x][point.y];
+        }
+        return ' ';
+    }
+    int getColor(coordinate point)
+    {
+        if (point.x < sizeOfBoard && point.x > -1 && point.y < sizeOfBoard && point.y > -1)
+        {
+            return color[point.x][point.y];
+        }
+        return 0;
     }
 };
 

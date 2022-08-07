@@ -114,20 +114,29 @@ protected:
 
         return VALID;
     }
-    void draw(Board board, coordinate startPoint, int validPlace)
+    void draw(Board &board, coordinate startPoint, int validPlace)
     {
-        int color = 0;
+        int color = INVALID_PLACE;
         if (validPlace == VALID)
         {
-            color = 1;
+            color = VALID_PLACE;
         }
         for (int i = 0; i < length; i++)
         {
             coordinate temp = startPoint + shape[i];
-            board.draw(temp, symbol, 0);
+            board.draw(temp, symbol, color);
         }
     }
-    void erase(Board board, coordinate startPoint);
+    void erase(Board &board, Board original, coordinate startPoint, vector<coordinate> oldShape)
+    {
+        for (int i = 0; i < oldShape.size(); i++)
+        {
+            coordinate p = startPoint + shape[i];
+            char sym = original.get(p);
+            int col = original.getColor(p);
+            board.draw(p, sym, col);
+        }
+    }
 
 public:
     Ship() {}
@@ -156,27 +165,26 @@ public:
         return length;
     }
 
-    void placeShip(Board board)
+    void placeShip(Board &board)
     {
         bool Chosen = false;
-        int validPlace = 0;
+        int validPlace = NOTVALID;
+        Board temp(board);
         coordinate startPoint(board.lowerLimit, board.lowerLimit);
         coordinate prev(board.lowerLimit, board.upperLimit);
         vector<coordinate> prevShape = shape;
         while (!Chosen || !validPlace)
         {
-            validPlace = checkValidity(board, startPoint); // does it intersect or not
-            draw(board, startPoint, validPlace);
-            board.display();
-            Chosen = navigate(board, startPoint);
-            cout << Chosen << endl;
-            cout << startPoint << endl;
-            cout << validPlace << endl;
-            //  erase(board, startPoint);
+            validPlace = checkValidity(temp, startPoint); // does it intersect or not
+            draw(temp, startPoint, validPlace);
+            temp.display();
+            erase(temp, board, startPoint, prevShape);
+            Chosen = navigate(temp, startPoint);
+            system("CLS");
             prevShape = shape;
         }
 
-        // draw(board, startPoint, );
+        draw(board, startPoint, FIXED_PLACE);
         return;
     }
 };

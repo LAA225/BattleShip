@@ -18,7 +18,6 @@
 #define FINISHED 13 // enter button.
 
 // Ship placement descriptions
-#define SHIPSET 2
 #define VALID 1
 #define NOTVALID 0
 
@@ -40,8 +39,8 @@
 // 14: Yellow
 // 15: Bright white
 #define VALID_PLACE 2
-#define FIXED_PLACE 1
 #define INVALID_PLACE 4
+#define FIXED_PLACE 1
 #define EMPTY 7
 
 void Color(int color)
