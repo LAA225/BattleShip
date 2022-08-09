@@ -2,6 +2,9 @@
 
 using namespace std;
 
+#ifndef AIRCRAFTCARRIER_CPP
+#define AIRCRAFTCARRIER_CPP
+
 class AircraftCarrier : public Ship
 {
     vector<coordinate> hShape;
@@ -44,3 +47,5 @@ public:
         }
     }
 };
+
+#endif

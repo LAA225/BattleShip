@@ -165,6 +165,11 @@ public:
         return length;
     }
 
+    char getSymbol()
+    {
+        return symbol;
+    }
+
     void placeShip(Board &board)
     {
         bool Chosen = false;

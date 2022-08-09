@@ -17,11 +17,15 @@
 // Button/key to select a spot
 #define FINISHED 13 // enter button.
 
+// symbols for
+#define MISS '0'
+#define HIT 'X'
+#define SEARCH 'O'
+
 // Ship placement descriptions
 #define VALID 1
 #define NOTVALID 0
 
-// Colors for ships during ship placement
 // COLORS LIST
 // 1: Blue
 // 2: Green
@@ -38,10 +42,17 @@
 // 13: Pink/Magenta
 // 14: Yellow
 // 15: Bright white
+
+// Colors for ships during ship placement
 #define VALID_PLACE 2
 #define INVALID_PLACE 4
 #define FIXED_PLACE 1
 #define EMPTY 7
+
+// Colors for during play
+#define MISS_C 1
+#define HIT_C 4
+#define SEARCH_C 14
 
 void Color(int color)
 {
