@@ -61,8 +61,9 @@ public:
                 Color(color[i][j]);
                 cout << board[i][j] << " ";
             }
-            cout << endl;
+            cout << "\n";
         }
+        cout << endl;
     }
 
     void initializeBoard()

@@ -170,6 +170,11 @@ public:
         return symbol;
     }
 
+    string getName()
+    {
+        return name;
+    }
+
     void placeShip(Board &board)
     {
         bool Chosen = false;

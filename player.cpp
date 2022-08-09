@@ -113,17 +113,32 @@ class Player
         }
         return point;
     }
+
     bool evaluateHit(coordinate p)
     {
         char sym = shipBoard.get(p);
-        if (sym == '.' || sym == '0') // miss
+        if (ships.find(sym) == ships.end())
         {
+            // music for miss
             return false;
         }
-        else // hit
+        else
         {
+            handleHit(sym);
             return true;
         }
+    }
+
+    void handleHit(char hitShip)
+    {
+        // music to announce hit
+        int left = ships[hitShip]->shipHit();
+        if (left == 0)
+        {
+            cout << "You sunk your enemy's " << ships[hitShip]->getName() << endl;
+            // ships.erase(hitShip);
+        }
+        shipParts--;
     }
 
 public:
@@ -136,14 +151,10 @@ public:
     {
         coordinate point = chooseLocation();
 
-        bool conclusion = evaluateHit(point);
+        bool conclusion = oponent.evaluateHit(point);
         if (conclusion == true)
         {
             movesBoard.draw(point, HIT, HIT_C);
-            // evaluate how to know if a ship has been sunk.
-            // i.e how to correlate symbol with ship.
-            // could make an enum and use that
-            // would also help with which ships to add on the util page
         }
         else
         {
@@ -151,5 +162,9 @@ public:
         }
         movesBoard.display();
         return conclusion;
+    }
+    int shipPartsRemaining()
+    {
+        return shipParts;
     }
 };
