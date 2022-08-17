@@ -5,8 +5,12 @@
 
 using namespace std;
 
+#ifndef PLAYER_H
+#define PLAYER_H
+
 class Player
 {
+    string name;
     // records ship placement
     Board shipBoard;
     // records moves made by player
@@ -18,6 +22,127 @@ class Player
     // total ship parts remaining to be hit
     int shipParts = 0;
 
+    bool navigate(coordinate &point)
+    {
+        char typed = 0;
+        coordinate temp = point;
+        while (1)
+        {
+            switch (typed = getch())
+            {
+            case KEY_UP:
+                temp.x = point.x - 1;
+                temp.y = point.y;
+                if (movesBoard.checkBoardBoundary(temp))
+                {
+                    point.x = temp.x;
+                    point.y = temp.y;
+                }
+                return false;
+
+            case KEY_DOWN:
+                temp.x = point.x + 1;
+                temp.y = point.y;
+                if (movesBoard.checkBoardBoundary(temp))
+                {
+                    point.x = temp.x;
+                    point.y = temp.y;
+                }
+                return false;
+
+            case KEY_RIGHT:
+                temp.x = point.x;
+                temp.y = point.y + 1;
+                if (movesBoard.checkBoardBoundary(temp))
+                {
+                    point.x = temp.x;
+                    point.y = temp.y;
+                }
+                return false;
+
+            case KEY_LEFT:
+                temp.x = point.x;
+                temp.y = point.y - 1;
+                if (movesBoard.checkBoardBoundary(temp))
+                {
+                    point.x = temp.x;
+                    point.y = temp.y;
+                }
+                return false;
+
+            case FINISHED:
+                return true;
+            default:
+                break;
+            }
+        }
+    }
+
+    coordinate chooseLocation(string msg = "")
+    {
+        bool Chosen = false;
+        coordinate point(movesBoard.lowerLimit, movesBoard.lowerLimit);
+        coordinate prevPoint = point;
+
+        char prevSym = movesBoard.get(point);
+        int prevCol = movesBoard.getColor(point);
+
+        while (!Chosen)
+        {
+
+            movesBoard.draw(point, SEARCH, SEARCH_C);
+            display();
+            movesBoard.draw(prevPoint, prevSym, prevCol);
+            Chosen = navigate(point);
+            prevPoint = point;
+            prevSym = movesBoard.get(point);
+            prevCol = movesBoard.getColor(point);
+            system("CLS");
+        }
+        return point;
+    }
+
+    bool evaluateHit(coordinate p)
+    {
+        char sym = shipBoard.get(p);
+        if (ships.find(sym) == ships.end())
+        {
+            // music for miss
+            return false;
+        }
+        else
+        {
+            handleHit(p, sym);
+            return true;
+        }
+    }
+
+    void handleHit(coordinate p, char hitShip)
+    {
+        // music to announce hit
+        int left = ships[hitShip]->shipHit();
+        if (left == 0)
+        {
+            cout << "You sunk your enemy's " << ships[hitShip]->getName() << endl;
+            // ships.erase(hitShip);
+        }
+        shipBoard.draw(p, EMPTY, EMPTY_C);
+        shipParts--;
+    }
+
+public:
+    Player(string s = "player")
+    {
+        name = s;
+    }
+    void setName(string s)
+    {
+        name = s;
+    }
+    string getName()
+    {
+        return name;
+    }
     void setupShips()
     {
         // to add more ordinary ships add to these lists
@@ -40,131 +165,53 @@ class Player
             ships[symbols[i]]->placeShip(shipBoard);
         }
     }
-    bool navigate(coordinate point)
+
+    bool shoot(Player *oponent, string msg = "")
     {
-        char typed = 0;
-        coordinate temp = point;
-        while (1)
-        {
-            switch (typed = getch())
-            {
-            case KEY_UP:
-                temp.x = point.x - 1;
-                temp.y = point.y;
-                if (movesBoard.checkBoardBoundary(temp))
-                {
-                    point.x = temp.x;
-                    point.y = temp.y;
-                }
-                return false;
-            case KEY_DOWN:
-                temp.x = point.x + 1;
-                temp.y = point.y;
-                if (movesBoard.checkBoardBoundary(temp))
-                {
-                    point.x = temp.x;
-                    point.y = temp.y;
-                }
-                return false;
-            case KEY_RIGHT:
-                temp.x = point.x;
-                temp.y = point.y + 1;
-                if (movesBoard.checkBoardBoundary(temp))
-                {
-                    point.x = temp.x;
-                    point.y = temp.y;
-                }
-                return false;
-            case KEY_LEFT:
-                temp.x = point.x;
-                temp.y = point.y - 1;
-                if (movesBoard.checkBoardBoundary(temp))
-                {
-                    point.x = temp.x;
-                    point.y = temp.y;
-                }
-            case FINISHED:
-                return true;
-            default:
-                break;
-            }
-        }
-    }
+        coordinate point = chooseLocation(msg);
 
-    coordinate chooseLocation()
-    {
-        bool Chosen = false;
-        coordinate point(movesBoard.lowerLimit, movesBoard.lowerLimit);
-        coordinate prevPoint = point;
-
-        char prevSym = ' ';
-        int prevCol = EMPTY;
-
-        while (!Chosen)
-        {
-            movesBoard.draw(point, SEARCH, SEARCH_C);
-            movesBoard.display();
-            movesBoard.draw(prevPoint, prevSym, prevCol);
-            Chosen = navigate(point);
-            prevPoint = point;
-            prevSym = movesBoard.get(point);
-            prevCol = movesBoard.getColor(point);
-            system("CLS");
-        }
-        return point;
-    }
-
-    bool evaluateHit(coordinate p)
-    {
-        char sym = shipBoard.get(p);
-        if (ships.find(sym) == ships.end())
-        {
-            // music for miss
-            return false;
-        }
-        else
-        {
-            handleHit(sym);
-            return true;
-        }
-    }
-
-    void handleHit(char hitShip)
-    {
-        // music to announce hit
-        int left = ships[hitShip]->shipHit();
-        if (left == 0)
-        {
-            cout << "You sunk your enemy's " << ships[hitShip]->getName() << endl;
-            // ships.erase(hitShip);
-        }
-        shipParts--;
-    }
-
-public:
-    Player()
-    {
-        setupShips();
-    }
-
-    bool shoot(Player &oponent)
-    {
-        coordinate point = chooseLocation();
-
-        bool conclusion = oponent.evaluateHit(point);
+        bool conclusion = oponent->evaluateHit(point);
         if (conclusion == true)
         {
             movesBoard.draw(point, HIT, HIT_C);
+            msg = "HIT!";
         }
         else
         {
             movesBoard.draw(point, MISS, MISS_C);
+            msg = "MISS.";
         }
-        movesBoard.display();
+        display(msg);
+        waitForUser();
+
         return conclusion;
     }
     int shipPartsRemaining()
     {
         return shipParts;
     }
+    void display(string msg = "")
+    {
+        cout << msg << endl;
+        cout << name << "'s Board" << endl;
+        movesBoard.display();
+        instructions();
+    }
+    void instructions()
+    {
+        cout << "INSTRUCTIONS: \n"
+             << "- Use ARROW KEYS to move your cursor to where you wish to shoot \n"
+             << "- Press ENTER to shoot \n"
+             << "- If you manage to hit your enemy ship, you will get another turn\n\n"
+             << "KEY: \n";
+        Color(SEARCH_C);
+        cout << SEARCH << ": Your Cursor\n";
+        Color(HIT_C);
+        cout << HIT << ": Hit Ship\n";
+        Color(MISS_C);
+        cout << MISS << ": Miss shot\n";
+        Color(EMPTY_C);
+    }
 };
+
+#endif

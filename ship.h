@@ -101,6 +101,7 @@ protected:
         }
         return true;
     }
+
     int checkValidity(Board board, coordinate startPoint) // does it cross other ships
     {
         for (int i = 0; i < length; i++)
@@ -114,12 +115,13 @@ protected:
 
         return VALID;
     }
+
     void draw(Board &board, coordinate startPoint, int validPlace)
     {
-        int color = INVALID_PLACE;
+        int color = INVALID_PLACE_C;
         if (validPlace == VALID)
         {
-            color = VALID_PLACE;
+            color = VALID_PLACE_C;
         }
         for (int i = 0; i < length; i++)
         {
@@ -127,6 +129,7 @@ protected:
             board.draw(temp, symbol, color);
         }
     }
+
     void erase(Board &board, Board original, coordinate startPoint, vector<coordinate> oldShape)
     {
         for (int i = 0; i < oldShape.size(); i++)
@@ -138,9 +141,30 @@ protected:
         }
     }
 
-public:
-    Ship() {}
+    void display(Board b)
+    {
+        cout << name << " placement \n";
+        b.display();
+        instructions();
+    }
 
+    void instructions()
+    {
+        cout << "INSTRUCTIONS: \n"
+             << "- Use ARROW KEYS to move your cursor to where you wish to place \n"
+             << "- Press SPACE BAR to switch orientation of ship \n"
+             << "- Press ENTER to shoot \n"
+             << "- You can only place a ship where it occupies enough space and doesnot intersect any other\n\n"
+             << "KEY: \n";
+        Color(VALID_PLACE_C);
+        cout << symbol << ": valid area to place ship \n";
+        Color(INVALID_PLACE_C);
+        cout << symbol << ": Invalid area to place ship \n";
+        Color(FIXED_PLACE_C);
+        cout << symbol << ": ship is set \n";
+    }
+
+public:
     Ship(string n, char sym, int l)
     {
         name = n;
@@ -194,7 +218,7 @@ public:
             prevShape = shape;
         }
 
-        draw(board, startPoint, FIXED_PLACE);
+        draw(board, startPoint, FIXED_PLACE_C);
         return;
     }
 };

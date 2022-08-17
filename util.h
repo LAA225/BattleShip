@@ -1,6 +1,10 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 #ifndef UTIL_H
 #define UTIL_H
@@ -17,14 +21,15 @@
 // Button/key to select a spot
 #define FINISHED 13 // enter button.
 
-// symbols for
-#define MISS '0'
-#define HIT 'X'
-#define SEARCH 'O'
-
 // Ship placement descriptions
 #define VALID 1
 #define NOTVALID 0
+
+// symbols for play
+#define MISS 'X'
+#define HIT 'X'
+#define SEARCH 'O'
+#define EMPTY '.'
 
 // COLORS LIST
 // 1: Blue
@@ -44,10 +49,10 @@
 // 15: Bright white
 
 // Colors for ships during ship placement
-#define VALID_PLACE 2
-#define INVALID_PLACE 4
-#define FIXED_PLACE 1
-#define EMPTY 7
+#define VALID_PLACE_C 2
+#define INVALID_PLACE_C 4
+#define FIXED_PLACE_C 1
+#define EMPTY_C 7
 
 // Colors for during play
 #define MISS_C 1
@@ -57,6 +62,13 @@
 void Color(int color)
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+void waitForUser()
+{
+    cout << "Press Enter to continue.............";
+    cin.get();
+    system("CLS");
 }
 
 #endif

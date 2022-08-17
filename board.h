@@ -106,7 +106,7 @@ public:
         {
             for (int j = 0; j < sizeOfBoard; j++)
             {
-                color[i][j] = EMPTY;
+                color[i][j] = EMPTY_C;
             }
         }
     }
