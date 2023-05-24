@@ -195,9 +195,10 @@ public:
         cout << msg << endl;
         cout << name << "'s Board" << endl;
         movesBoard.display();
-        instructions();
+        shootInstructions();
     }
-    void instructions()
+
+    void shootInstructions()
     {
         cout << "INSTRUCTIONS: \n"
              << "- Use ARROW KEYS to move your cursor to where you wish to shoot \n"

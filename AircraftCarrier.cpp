@@ -12,11 +12,11 @@ class AircraftCarrier : public Ship
     char currentShape;
 
 public:
-    AircraftCarrier()
+    AircraftCarrier() : Ship("Aircraft Carrier", 'A', 5)
     {
-        name = "Aircraft Carrier";
-        symbol = 'A';
-        length = 5;
+        // name = "Aircraft Carrier";
+        // symbol = 'A';
+        // length = 5;
 
         hShape.push_back(coordinate(0, 0));
         hShape.push_back(coordinate(0, 1));

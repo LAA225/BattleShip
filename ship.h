@@ -116,13 +116,18 @@ protected:
         return VALID;
     }
 
-    void draw(Board &board, coordinate startPoint, int validPlace)
+    void draw(Board &board, coordinate startPoint, int validPlace, bool final=false)
     {
         int color = INVALID_PLACE_C;
         if (validPlace == VALID)
         {
             color = VALID_PLACE_C;
         }
+        
+        if(final == true){
+            color = FIXED_PLACE_C;
+        }
+
         for (int i = 0; i < length; i++)
         {
             coordinate temp = startPoint + shape[i];
@@ -145,11 +150,9 @@ protected:
     {
         cout << name << " placement \n";
         b.display();
-        instructions();
     }
 
-    void instructions()
-    {
+    void placeShipInstructions(){
         cout << "INSTRUCTIONS: \n"
              << "- Use ARROW KEYS to move your cursor to where you wish to place \n"
              << "- Press SPACE BAR to switch orientation of ship \n"
@@ -165,6 +168,7 @@ protected:
     }
 
 public:
+    Ship(){}
     Ship(string n, char sym, int l)
     {
         name = n;
@@ -212,13 +216,14 @@ public:
             validPlace = checkValidity(temp, startPoint); // does it intersect or not
             draw(temp, startPoint, validPlace);
             temp.display();
+            placeShipInstructions();
             erase(temp, board, startPoint, prevShape);
             Chosen = navigate(temp, startPoint);
             system("CLS");
             prevShape = shape;
         }
 
-        draw(board, startPoint, FIXED_PLACE_C);
+        draw(board, startPoint, VALID, true);
         return;
     }
 };

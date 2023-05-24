@@ -61,20 +61,20 @@ class BattleShip
                << "Diagonal placement is not allowed." << endl
                << "No part of a ship may hang off the edge of the board." << endl
                << "Ships may not overlap each other." << endl
-               << "No two ships can share an adjacent square horizontally," << endl
-               << "vertically or diagonally." << endl
-               << "Ships can be placed by inputting the starting coordinates" << endl
-               << "of a ship along with its orientation ('v' for vertical and 'h' for horizontal)." << endl
-               << "Once the ship has been placed, the players may not move the ships." << endl
-               << "The 5 ships are:  Carrier (occupies 5 spaces in the shape of a T)," << endl
+               << "Ships can be placed by using the arrow keys to view all possibilities across the board" << endl
+               << "You can change orientation by clicking the Space bar" << endl
+               << "Press Enter to place the ship." << endl
+               << "Once the ship has been placed, the players may not move the ships." << endl 
+               << endl
+               << "The 5 ships are: Aircraft Carrier (occupies 5 spaces in the shape of a T)," << endl
                << "Battleship (4), Cruiser (3), Submarine (3), and Destroyer (2)." << endl
                << endl;
           cout << "SHOOTING:" << endl
-               << "Each player will try and hit the opponent's ship by calling out" << endl
-               << "the coordinates of one of the squares on the board." << endl
+               << "Each player will try and hit the opponent's ship by selecting" << endl
+               << "the coordinates of one of the squares on the board by using the arrow keys and Enter." << endl
                << "If a player hits his opponent's ship," << endl
-               << "a hit is declared by an 'X' on the grid. " << endl
-               << "A miss is marked with a '*'" << endl
+               << "a hit is declared by a red 'X' on the grid. " << endl
+               << "A miss is marked with a blue 'X'" << endl
                << "If it is a hit, the player gets another turn otherwise the turn is" << endl
                << "passed on to the other player." << endl
                << "The game ends when all the ships of one player have been sunk." << endl
@@ -134,7 +134,9 @@ class BattleShip
                          win(attackPlayer);
                          endGame = true;
                     }
-                    msg = "Hit! " + attackPlayer->getName() + " gets another turn for hitting \n";
+                    else{
+                         msg = "Hit! " + attackPlayer->getName() + " gets another turn for hitting \n";
+                    }
                }
                else // miss
                {
