@@ -19,213 +19,53 @@ protected:
     int length;
     vector<coordinate> shape;
 
-    bool navigate(Board board, coordinate &startPoint)
-    {
-        char typed = 0;
-        coordinate temp;
-        while (1)
-        {
-            switch (typed = getch())
-            {
-            case KEY_UP:
-                temp.x = startPoint.x - 1;
-                temp.y = startPoint.y;
-                if (shipFit(board, temp))
-                {
-                    startPoint.x = temp.x;
-                    startPoint.y = temp.y;
-                }
-                return false;
-            case KEY_DOWN:
-                temp.x = startPoint.x + 1;
-                temp.y = startPoint.y;
-                if (shipFit(board, temp))
-                {
-                    startPoint.x = temp.x;
-                    startPoint.y = temp.y;
-                }
-                return false;
-            case KEY_RIGHT:
-                temp.x = startPoint.x;
-                temp.y = startPoint.y + 1;
-                if (shipFit(board, temp))
-                {
-                    startPoint.x = temp.x;
-                    startPoint.y = temp.y;
-                }
-                return false;
-            case KEY_LEFT:
-                temp.x = startPoint.x;
-                temp.y = startPoint.y - 1;
-                if (shipFit(board, temp))
-                {
-                    startPoint.x = temp.x;
-                    startPoint.y = temp.y;
-                }
-                return false;
-            case FINISHED:
-                return true;
-            case ORIENTATION:
-                changeOrientation();
-                if (shipFit(board, startPoint) == false)
-                {
-                    changeOrientation();
-                }
-                return false;
-            default:
-                break;
-            }
-        }
-    }
+    // control the cursor on the board
+    bool navigate(Board board, coordinate &startPoint);
+    
     // change shape from horizontial to vertical or vice versa
-    void changeOrientation()
-    {
-        for (int i = 0; i < length; i++)
-        {
-            int temp = shape[i].x;
-            shape[i].x = shape[i].y;
-            shape[i].y = temp;
-        }
-    }
+    void changeOrientation();
 
-    bool shipFit(Board board, coordinate start)
-    {
-        coordinate temp;
-        for (int i = 0; i < length; i++)
-        {
-            temp = start + shape[i];
-            if (board.checkBoardBoundary(temp) == false)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+    // check if the ship fits in the coordinate given
+    bool shipFit(Board board, coordinate start);
 
-    int checkValidity(Board board, coordinate startPoint) // does it cross other ships
-    {
-        for (int i = 0; i < length; i++)
-        {
-            coordinate temp = startPoint + shape[i];
-            if (board.checkEmptySpace(temp) == false)
-            {
-                return NOTVALID;
-            }
-        }
+    //check if the ship overlaps other ships in the coordinate given
+    int checkValidity(Board board, coordinate startPoint); // does it cross other ships
 
-        return VALID;
-    }
+    // draw the ship on the coordinates given using validPlace and final to decide the color. 
+    // Final is to set the color to set the ship in its permanent position
+    void draw(Board &board, coordinate startPoint, int validPlace, bool final=false);
 
-    void draw(Board &board, coordinate startPoint, int validPlace, bool final=false)
-    {
-        int color = INVALID_PLACE_C;
-        if (validPlace == VALID)
-        {
-            color = VALID_PLACE_C;
-        }
-        
-        if(final == true){
-            color = FIXED_PLACE_C;
-        }
+    // erase the ship off a given coordinate on the board using the version of the board 
+    // before the ship was set and the shape of the ship used to set. 
+    void erase(Board &board, Board original, coordinate startPoint, vector<coordinate> oldShape);
 
-        for (int i = 0; i < length; i++)
-        {
-            coordinate temp = startPoint + shape[i];
-            board.draw(temp, symbol, color);
-        }
-    }
+    // Display the board
+    void display(Board b);
 
-    void erase(Board &board, Board original, coordinate startPoint, vector<coordinate> oldShape)
-    {
-        for (int i = 0; i < oldShape.size(); i++)
-        {
-            coordinate p = startPoint + shape[i];
-            char sym = original.get(p);
-            int col = original.getColor(p);
-            board.draw(p, sym, col);
-        }
-    }
-
-    void display(Board b)
-    {
-        cout << name << " placement \n";
-        b.display();
-    }
-
-    void placeShipInstructions(){
-        cout << "INSTRUCTIONS: \n"
-             << "- Use ARROW KEYS to move your cursor to where you wish to place \n"
-             << "- Press SPACE BAR to switch orientation of ship \n"
-             << "- Press ENTER to shoot \n"
-             << "- You can only place a ship where it occupies enough space and doesnot intersect any other\n\n"
-             << "KEY: \n";
-        Color(VALID_PLACE_C);
-        cout << symbol << ": valid area to place ship \n";
-        Color(INVALID_PLACE_C);
-        cout << symbol << ": Invalid area to place ship \n";
-        Color(FIXED_PLACE_C);
-        cout << symbol << ": ship is set \n";
-    }
+    // Instructions to show user on how to place ship
+    void placeShipInstructions();
 
 public:
     Ship(){}
-    Ship(string n, char sym, int l)
-    {
-        name = n;
-        symbol = sym;
-        length = l;
 
-        for (int i = 0; i < length; i++)
-        {
-            // horizontal by default
-            shape.push_back(coordinate(0, i));
-        }
-    }
+    // set the name, symbol and length of a ship
+    Ship(string n, char sym, int l);
 
-    int shipHit()
-    {
-        length--;
-        return length;
-    }
+    // when a ship is hit, its length decreases
+    int shipHit();
 
-    int getLength()
-    {
-        return length;
-    }
+    // return remaining length
+    int getLength();
 
-    char getSymbol()
-    {
-        return symbol;
-    }
+    // return assigned symbol
+    char getSymbol();
 
-    string getName()
-    {
-        return name;
-    }
+    // return assigned name
+    string getName();
 
-    void placeShip(Board &board)
-    {
-        bool Chosen = false;
-        int validPlace = NOTVALID;
-        Board temp(board);
-        coordinate startPoint(board.lowerLimit, board.lowerLimit);
-        coordinate prev(board.lowerLimit, board.upperLimit);
-        vector<coordinate> prevShape = shape;
-        while (!Chosen || !validPlace)
-        {
-            validPlace = checkValidity(temp, startPoint); // does it intersect or not
-            draw(temp, startPoint, validPlace);
-            temp.display();
-            placeShipInstructions();
-            erase(temp, board, startPoint, prevShape);
-            Chosen = navigate(temp, startPoint);
-            system("CLS");
-            prevShape = shape;
-        }
-
-        draw(board, startPoint, VALID, true);
-        return;
-    }
+    // choose where to place a ship on the board given
+    void placeShip(Board &board);
+    
 };
 
 #endif
