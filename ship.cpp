@@ -71,6 +71,14 @@ void Ship::changeOrientation()
     }
 }
 
+void Ship::defineShape(){
+    for (int i = 0; i < length; i++)
+    {
+        // horizontal by default
+        shape.push_back(coordinate(0, i));
+    }
+}
+
 bool Ship::shipFit(Board board, coordinate start)
 {
     coordinate temp;
@@ -99,7 +107,7 @@ int Ship::checkValidity(Board board, coordinate startPoint) // does it cross oth
     return VALID;
 }
 
-void Ship::draw(Board &board, coordinate startPoint, int validPlace, bool final=false)
+void Ship::draw(Board &board, coordinate startPoint, int validPlace, bool final)
 {
     int color = INVALID_PLACE_C;
     if (validPlace == VALID)
@@ -157,11 +165,7 @@ Ship::Ship(string n, char sym, int l)
     symbol = sym;
     length = l;
 
-    for (int i = 0; i < length; i++)
-    {
-        // horizontal by default
-        shape.push_back(coordinate(0, i));
-    }
+    defineShape();
 }
 
 int Ship::shipHit()

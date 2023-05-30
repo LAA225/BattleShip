@@ -145,13 +145,18 @@ public:
     }
     void setupShips()
     {
-        // to add more ordinary ships add to these lists
+        // to add more ordinary ships, add to these lists. 
+        // string name of ship in "names"
+        // char symbol of ship in "symbols"
+        // int length of ship in "lengths`"
         vector<string> names = {"BattleShip", "Carrier", "Cruiser", "Destroyer"};
         vector<char> symbols = {'B', 'C', 'S', 'D'};
         vector<int> lengths = {5, 4, 3, 2};
 
+        Ship* temp = NULL;
+        
         // special ship
-        Ship *temp = new AircraftCarrier();
+        temp = new AircraftCarrier();
         char s = temp->getSymbol();
         shipParts += temp->getLength();
         ships[s] = temp;
@@ -164,6 +169,7 @@ public:
             ships[symbols[i]] = temp;
             ships[symbols[i]]->placeShip(shipBoard);
         }
+
     }
 
     bool shoot(Player *oponent, string msg = "")

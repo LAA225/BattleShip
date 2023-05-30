@@ -1,4 +1,5 @@
 #include "ship.h"
+#include "ship.cpp"
 
 using namespace std;
 
@@ -12,12 +13,9 @@ class AircraftCarrier : public Ship
     char currentShape;
 
 public:
-    AircraftCarrier() : Ship("Aircraft Carrier", 'A', 5)
-    {
-        // name = "Aircraft Carrier";
-        // symbol = 'A';
-        // length = 5;
+    AircraftCarrier() : Ship("Aircraft Carrier", 'A', 5){}
 
+    void defineShape(){
         hShape.push_back(coordinate(0, 0));
         hShape.push_back(coordinate(0, 1));
         hShape.push_back(coordinate(0, 2));
@@ -33,6 +31,7 @@ public:
         shape = hShape;
         currentShape = 'h';
     }
+
     void changeOrientation()
     {
         if (currentShape == 'h')

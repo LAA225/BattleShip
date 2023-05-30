@@ -23,7 +23,10 @@ protected:
     bool navigate(Board board, coordinate &startPoint);
     
     // change shape from horizontial to vertical or vice versa
-    void changeOrientation();
+    virtual void changeOrientation();
+
+    // decide the shape of the ship and assign to shape vector
+    virtual void defineShape();
 
     // check if the ship fits in the coordinate given
     bool shipFit(Board board, coordinate start);
