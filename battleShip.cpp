@@ -4,8 +4,8 @@
 
 using namespace std;
 
-#ifndef BATTLESHIP_H
-#define BATTLESHIP_H
+#ifndef BATTLESHIP_CPP
+#define BATTLESHIP_CPP
 
 class BattleShip
 {

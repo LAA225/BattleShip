@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <iostream>
 #include "board.h"
+#include "board.cpp"
 #include "coordinate.h"
 
 using namespace std;
