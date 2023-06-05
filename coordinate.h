@@ -21,12 +21,18 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &, const coordinate &);
+    
     coordinate operator+(const coordinate &a)
     {
         coordinate ans;
         ans.x = x + a.x;
         ans.y = y + a.y;
         return ans;
+    }
+
+    void updateXY(int a, int b){
+        x = a;
+        y = b;
     }
 };
 

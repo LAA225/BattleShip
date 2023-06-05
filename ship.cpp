@@ -2,48 +2,47 @@
 
 using namespace std;
 
+#ifndef SHIP_CPP
+#define SHIP_CPP
+
 bool Ship::navigate(Board board, coordinate &startPoint)
 {
-    char typed = 0;
     coordinate temp;
+    coordinate change;
+    char typed = 0;
     while (1)
     {
         switch (typed = getch())
         {
         case KEY_UP:
-            temp.x = startPoint.x - 1;
-            temp.y = startPoint.y;
-            if (shipFit(board, temp))
-            {
-                startPoint.x = temp.x;
-                startPoint.y = temp.y;
+            change.updateXY(-1,0);
+            temp = startPoint + change;
+            if(shipFit(board, temp)){
+                startPoint.updateXY(temp.x,temp.y);
             }
             return false;
         case KEY_DOWN:
-            temp.x = startPoint.x + 1;
-            temp.y = startPoint.y;
+            change.updateXY(1,0);
+            temp = startPoint + change;
             if (shipFit(board, temp))
             {
-                startPoint.x = temp.x;
-                startPoint.y = temp.y;
+                startPoint.updateXY(temp.x,temp.y);
             }
             return false;
         case KEY_RIGHT:
-            temp.x = startPoint.x;
-            temp.y = startPoint.y + 1;
+            change.updateXY(0,1);
+            temp = startPoint + change;
             if (shipFit(board, temp))
             {
-                startPoint.x = temp.x;
-                startPoint.y = temp.y;
+                startPoint.updateXY(temp.x,temp.y);
             }
             return false;
         case KEY_LEFT:
-            temp.x = startPoint.x;
-            temp.y = startPoint.y - 1;
+            change.updateXY(0,-1);
+            temp = startPoint + change;
             if (shipFit(board, temp))
             {
-                startPoint.x = temp.x;
-                startPoint.y = temp.y;
+                startPoint.updateXY(temp.x,temp.y);
             }
             return false;
         case FINISHED:
@@ -93,11 +92,12 @@ bool Ship::shipFit(Board board, coordinate start)
     return true;
 }
 
-int Ship::checkValidity(Board board, coordinate startPoint) // does it cross other ships
+int Ship::intersectShip(Board board, coordinate startPoint) // does it cross other ships
 {
+    coordinate temp;
     for (int i = 0; i < length; i++)
     {
-        coordinate temp = startPoint + shape[i];
+        temp = startPoint + shape[i];
         if (board.checkEmptySpace(temp) == false)
         {
             return NOTVALID;
@@ -200,7 +200,7 @@ void Ship::placeShip(Board &board)
     vector<coordinate> prevShape = shape;
     while (!Chosen || !validPlace)
     {
-        validPlace = checkValidity(temp, startPoint); // does it intersect or not
+        validPlace = intersectShip(temp, startPoint); // does it intersect or not
         draw(temp, startPoint, validPlace);
         temp.display();
         placeShipInstructions();
@@ -213,3 +213,5 @@ void Ship::placeShip(Board &board)
     draw(board, startPoint, VALID, true);
     return;
 }
+
+#endif

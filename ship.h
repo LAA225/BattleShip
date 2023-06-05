@@ -19,6 +19,9 @@ protected:
     int length;
     vector<coordinate> shape;
 
+    // make change to coordinate according to other coordinate and check if valid
+    coordinate changeCoordinate(coordinate start, coordinate change);
+
     // control the cursor on the board
     bool navigate(Board board, coordinate &startPoint);
     
@@ -32,7 +35,7 @@ protected:
     bool shipFit(Board board, coordinate start);
 
     //check if the ship overlaps other ships in the coordinate given
-    int checkValidity(Board board, coordinate startPoint); // does it cross other ships
+    int intersectShip(Board board, coordinate startPoint); // does it cross other ships
 
     // draw the ship on the coordinates given using validPlace and final to decide the color. 
     // Final is to set the color to set the ship in its permanent position
