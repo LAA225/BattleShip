@@ -1,3 +1,4 @@
+#include "player.h"
 #include "player.cpp"
 #include <iostream>
 #include <string>
